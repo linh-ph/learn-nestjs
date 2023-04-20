@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { CreateUserDto } from './dto/createUser.dto';
+import { ApiTags } from '@nestjs/swagger';
 @Controller()
+@ApiTags('HomePage') //specifies a tag for this endpoint which is used in the Swagger UI to group endpoints by tag.
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
@@ -10,24 +11,8 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get(':id')
-  getUserById(@Param('id') id: string) {
-    return this.appService.getUserById(Number(id));
+  @Get('/health-check')
+  healthCheck(): string {
+    return this.appService.healthCheck();
   }
-
-  @Post()
-  async createUser(@Body() user: CreateUserDto) {
-    return this.appService.createUser(user);
-  }
- 
-  // @Put(':id')
-  // async replacePost(@Param('id') id: string, @Body() post: UpdateUserDto) {
-  //   return this.appService.replacePost(Number(id), post);
-  // }
- 
-  // @Delete(':id')
-  // async deletePost(@Param('id') id: string) {
-  //   this.appService.deletePost(Number(id));
-  // }
-
 }

@@ -1,17 +1,23 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
- 
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
 @Entity()
 class Post {
   @PrimaryGeneratedColumn()
   public id: number;
- 
+
   @Column()
   public title: string;
- 
+
   @Column()
   public content: string;
 
-  @Column({type: 'timestamptz'})
+  @Column({ type: 'timestamptz' })
   public time: Date;
 
   @CreateDateColumn()
@@ -20,5 +26,5 @@ class Post {
   @UpdateDateColumn()
   public updated_at: Date;
 }
- 
+
 export default Post;
