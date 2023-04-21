@@ -10,6 +10,7 @@ import User from '../db/entities/user.entity';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UserService } from './user.service';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UserDTO } from './dto/user.dto';
 
 @ApiTags('Users') //specifies a tag for this endpoint which is used in the Swagger UI to group endpoints by tag.
 @Controller('user')
@@ -32,8 +33,14 @@ export class UserController {
     return this.userService.getUserById(id);
   }
 
+  // @Get()
+  // getByEmail(@Param('email') email: string): Promise<User> {
+  //   return this.userService.getByEmail(email);
+  // }
+
   @Get()
-  getByEmail(@Param('email') email: string): Promise<User> {
-    return this.userService.getByEmail(email);
+  @ApiOperation({ summary: 'Get user information' }) //documents the summary of this endpoint.
+  getAllUsers(): Promise<UserDTO[]> {
+    return this.userService.getAllUsers();
   }
 }
