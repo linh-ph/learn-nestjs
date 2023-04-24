@@ -4,12 +4,14 @@ import User from '../db/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UserDTO } from './dto/user.dto';
+import { HashService } from 'src/util/hashPassword';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly hashService: HashService,
   ) {}
 
   async getAllUsers(): Promise<UserDTO[]> {
@@ -19,7 +21,17 @@ export class UserService {
 
   async create(user: CreateUserDto): Promise<User> {
     try {
-      const newUser = this.userRepository.create(user);
+      // A Promise<string> is an object that represents an asynchronous operation that will eventually return a string.
+      // In contrast, a string is a plain value that represents a sequence of characters.
+      /**  use the await keyword to wait for the Promise<string> to resolve and return its value.
+       * function là promise là bất đồng bộ (asynchronous) thì phải await (bắt sự kiện) của nó để chuyển về string
+       */
+      const password = await this.hashService.hashPassword(user.password);
+      const newUser = this.userRepository.create({
+        ...user,
+        password,
+      });
+
       console.log('new users:', newUser);
       await this.userRepository.save(user);
 
